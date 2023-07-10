@@ -1,0 +1,76 @@
+﻿@model MVCPrueba.Models.Catalogos
+@{ 
+
+    List<MVCPrueba.Models.Inscripcion> lista = new List<MVCPrueba.Models.Inscripcion>();
+
+    lista = (List<MVCPrueba.Models.Inscripcion>)this.ViewData["Lista"];
+}
+@{
+    ViewBag.Title = "Reporte";
+}
+
+<h2>Reporte</h2>
+
+<div class="col-lg-12 RP" id="RP">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Carnet</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Género</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Fecha nacimiento</th>
+                <th scope="col">Carrera</th>
+                <th scope="col">Género poesía</th>
+                <th scope="col">Fecha inscripción</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (lista != null)
+            {
+                int contador = 0;
+                foreach (var i in lista)
+                {
+                    contador++;
+                    <tr>
+                        <th>@contador</th>
+                        <td>@i.carnet</td>
+                        <td>@i.nombre</td>
+                        @foreach (var j in Model.listaGenero)
+                        {
+                            if (i.idGenero == j.idGenero)
+                            {
+                                <td>@j.Descripcion</td>
+                            }
+
+                        }
+
+                        <td>@i.telefono</td>
+                        <td>@i.fechaNacimiento.ToString("dd/MM/yyyy")</td>
+                        @foreach (var k in Model.listaCarrera)
+                        {
+                            if (i.idCarrera == k.idCarrera)
+                            {
+                                <td>@k.nombre</td>
+                            }
+
+                        }
+                        @foreach (var l in Model.listaGeneroPoesia)
+                        {
+                            if (i.idGeneroPoesia == l.idGenero)
+                            {
+                                <td>@l.Descripcion</td>
+                            }
+
+                        }
+                        <td>@i.fechaInscripcion.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+

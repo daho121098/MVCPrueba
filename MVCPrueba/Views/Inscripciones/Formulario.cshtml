@@ -1,0 +1,133 @@
+﻿@model MVCPrueba.Models.Catalogos
+@{
+    ViewBag.Title = "Formulario";
+}
+
+<h2>Formulario de inscripción</h2>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="~/Content/jquery-3.6.0.min.js"></script>
+
+<div class="col-lg-12">
+    <form id="formularioInscripcion" name="formularioInscripcion" action="@Url.Action("Formulario")" method="post">
+        <div class="col-lg-12 form-group">
+            <div class="col-lg-4 form-group">
+                <label>Carnet:</label>
+                <input type="text" class="form-control" maxlength="6" name="carnet" id="carnet" required />
+            </div>
+            <div class="col-lg-4 form-group">
+                <label>Nombre completo:</label>
+                <input type="text" class="form-control" name="nombre" id="nombre" required />
+            </div>
+            @*<div class="col-lg-4 form-group">
+                <label>Dirección:</label>
+                <input type="text" class="form-control" name="txtDireccion" id="txtDireccion" required />
+            </div>*@
+            <div class="col-lg-4 form-group">
+                <label>Género:</label>
+                <select class="form-control" name="idGenero" id="idGenero" required>
+                    <option value=""> Selecciona su género</option>
+                    @foreach (var item in @Model.listaGenero)
+                    {
+
+                        <option value="@item.idGenero"> @item.Descripcion</option>
+
+                    }
+                </select>
+                @*<small id="error" class="form-text text-muted">Debe ingresar el campo.</small>*@
+            </div>
+            <div class="col-lg-4 form-group">
+                <label>Teléfono:</label>
+                <input type="text" class="form-control" maxlength="8" name="telefono" id="telefono" required />
+            </div>
+            <div class="col-lg-4 form-group">
+                <label>Fecha de nacimiento:</label>
+                <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento" required />
+            </div>
+            <div class="col-lg-4 form-group">
+                <label>Carrera:</label>
+                <select class="form-control" name="idCarrera" id="idCarrera" required>
+                    <option value=""> Selecciona tú carrera</option>
+                    @if (Model.listaCarrera != null)
+                    {
+                        foreach (var item in @Model.listaCarrera)
+                        {
+
+                            <option value="@item.idCarrera"> @item.nombre</option>
+
+                        }
+                    }
+
+                </select>
+            </div>
+            <div class="col-lg-4 form-group">
+                <label>Género poesía:</label>
+                <select class="form-control" name="idGeneroPoesia" id="idGeneroPoesia" required>
+                    <option value=""> Selecciona un género poesía</option>
+                    @if (Model.listaCarrera != null)
+                    {
+                        foreach (var item in @Model.listaGeneroPoesia)
+                        {
+
+                            <option value="@item.idGenero"> @item.Descripcion</option>
+
+                        }
+                    }
+
+                </select>
+            </div>
+        </div>
+        <button type="submit" id="registrar" name="registrar" class="btn btn-primary">Registrar</button>
+    </form>
+</div>
+
+<script>
+    $(function () {
+        $("#fechaNacimiento").change(function () {
+            var fecha = $(this).val();
+            var annoIngresado = new Date(fecha);
+            annoIngresado = annoIngresado.getFullYear();
+
+            var fechaActual = new Date();
+            var edad = fechaActual.getFullYear() - annoIngresado;
+            if (edad <= 17) {
+                alert("No es mayor de edad")
+                $(this).val("");
+            }
+        });
+
+        $("#carnet").on('keypress', function (event) {
+            var regex = new RegExp("^[a-zA-Z1-9]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $("#telefono").on('keypress', function (event) {
+            var regex = new RegExp("^[0-9]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $("#formularioInscripcion").submit(function (e) {
+            e.preventDefault();
+            let carnet = document.getElementById("carnet").value;
+            if (!carnet.startsWith('A')) {
+                alert("El carnet no inicia con A");
+            } else if (carnet.charAt(2) != 5) {
+                alert("El tercer carácter debe ser 5");
+            }
+            else if (!carnet.endsWith("1") && !carnet.endsWith("3") && !carnet.endsWith("9")) {
+                alert("El carnet debe terminar con 1, 3 o 9");
+            }
+            else {
+                this.submit();
+            }
+        });
+    })
+</script>
